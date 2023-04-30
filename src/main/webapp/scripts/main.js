@@ -35,33 +35,12 @@ function printItems(respObjList){
 	document.getElementById("tbody").innerHTML = htmlStr;	
 }
 
-/*function ValidateEmail() {
-  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  if (input.value.match(validRegex)) {
-    alert("Valid email address!");
-    document.form1.text1.focus();
-    return true;
-  } else {
-    alert("Invalid email address!");
-    document.form1.text1.focus();
-    return false;
-  }
-}*/
-
 //Tutkitaan lisättävät tiedot ennen niiden lähettämistä backendiin
 function tutkiJaLisaa(){
 	if(tutkiTiedot()){
 		lisaaTiedot();
 	}
 }
-
-//Tutkitaan lisättävät tiedot ennen niiden lähettämistä backendiin
-// EI TÄMÄ TOIMI NÄIN
-/*function tutkiJaLisaa(){
-	if(tutkiTiedot() && ValidateEmail()) {
-		function lisaaTiedot()
-	}
-}*/
 
 //funktio syöttötietojen tarkistamista varten (yksinkertainen)
 function tutkiTiedot(){
@@ -74,12 +53,10 @@ function tutkiTiedot(){
 		document.getElementById("sukunimi").focus();			
 	}else if(document.getElementById("puhelin").value.length<5){
 		ilmo="Puhelinnumero ei kelpaa!";	
-		document.getElementById("puhelin").focus();
-			
+		document.getElementById("puhelin").focus();		
 	}else if(document.getElementById("sposti").value.length<5){
 		ilmo="Sähköposti ei kelpaa!";	
-		document.getElementById("sposti").focus();	
-		
+		document.getElementById("sposti").focus();		
 	}
 	if(ilmo!=""){
 		document.getElementById("ilmo").innerHTML=ilmo;
