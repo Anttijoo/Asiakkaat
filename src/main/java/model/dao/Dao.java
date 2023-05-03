@@ -142,13 +142,13 @@ public class Dao {
 		return paluuArvo;
 	}
 	
-	public boolean removeItem(int id) { // Oikeassa el‰m‰ss‰ tiedot ensisijaisesti merkit‰‰n poistetuksi.
+	public boolean removeItem(int asiakas_id) { // Oikeassa el‰m‰ss‰ tiedot ensisijaisesti merkit‰‰n poistetuksi.
 		boolean paluuArvo = true;
 		sql = "DELETE FROM asiakkaat WHERE asiakas_id=?";
 		try {
 			con = yhdista();
 			stmtPrep = con.prepareStatement(sql);
-			stmtPrep.setInt(1, id);
+			stmtPrep.setInt(1, asiakas_id);
 			stmtPrep.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

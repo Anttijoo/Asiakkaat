@@ -29,7 +29,7 @@ function printItems(respObjList){
     	htmlStr+="<td>"+item.sukunimi+"</td>";
     	htmlStr+="<td>"+item.puhelin+"</td>";
     	htmlStr+="<td>"+item.sposti+"</td>";
-    	htmlStr+="<td><span class='poista' onclick=varmistaPoisto("+item.asiakas_id+",'"+encodeURI(item.etunimi)+"','"+encodeURI(item.sukunimi)+"')>Poista</span></td>";	
+    	htmlStr+="<td><span class='poista' onclick=varmistaPoisto("+item.asiakas_id+",'"+encodeURI(item.etunimi + " " + item.sukunimi)+"')>Poista</span></td>";	
     	htmlStr+="</tr>";    	
 	}	
 	document.getElementById("tbody").innerHTML = htmlStr;	
@@ -54,7 +54,8 @@ function tutkiTiedot(){
 	}else if(document.getElementById("puhelin").value.length<5){
 		ilmo="Puhelinnumero ei kelpaa!";	
 		document.getElementById("puhelin").focus();		
-	}else if(document.getElementById("sposti").value.length<5){
+	}else if((document.getElementById("sposti").value.length<8||document.getElementById("sposti").value.indexOf(".")==-1||document.getElementById("sposti").value.indexOf("@")==-1)){
+		// sähköpostin tulee sisältää väh.8 merkkiä, "@" merkin ja "." merkin.
 		ilmo="Sähköposti ei kelpaa!";	
 		document.getElementById("sposti").focus();		
 	}
@@ -74,7 +75,8 @@ function tutkiTiedot(){
 //Funktio XSS-hyökkäysten estämiseksi (Cross-site scripting)
 function siivoa(teksti){
 	teksti=teksti.replace(/</g, "");//&lt;
-	teksti=teksti.replace(/>/g, "");//&gt;	
+	teksti=teksti.replace(/>/g, "");//&gt;
+	teksti=teksti.replace(/;/g, "");//&#59;
 	teksti=teksti.replace(/'/g, "''");//&apos;	
 	return teksti;
 }
@@ -86,7 +88,7 @@ function lisaaTiedot(){
 	let url = "myynti";    
     let requestOptions = {
         method: "POST", //Lisätään asiakas
-        headers: { "Content-Type": "application/json" },  
+        headers: { "Content-Type": "application/json; charset=UTF-8" },  // charset=UTF-8 hoitaa skandinaaviset merkit oikein backendiin
     	body: formData
     };    
     fetch(url, requestOptions)
@@ -104,14 +106,14 @@ function lisaaTiedot(){
    	.catch(errorText => console.error("Fetch failed: " + errorText));
 }
 
-function varmistaPoisto(asiakas_id, etunimi, sukunimi){
-	if(confirm("Poista asiakas " + decodeURI(etunimi) + decodeURI(sukunimi) +"?")){ //decodeURI() muutetaan enkoodatut merkit takaisin normaaliksi kirjoitukseksi
-		poistaAsiakas(asiakas_id, encodeURI(etunimi), encodeURI(sukunimi));
+function varmistaPoisto(asiakas_id, nimi){
+	if(confirm("Poista asiakas " + decodeURI(nimi) +"?")){ //decodeURI() muutetaan enkoodatut merkit takaisin normaaliksi kirjoitukseksi
+		poistaAsiakas(asiakas_id, nimi);
 	}
 }
 
 //Poistetaan asiakas kutsumalla backin DELETE-metodia ja välittämällä sille poistettavan auton id
-function poistaAsiakas(asiakas_id, etunimi, sukunimi){
+function poistaAsiakas(asiakas_id, nimi){
 	let url = "myynti?asiakas_id=" + asiakas_id;    
     let requestOptions = {
         method: "DELETE"             
@@ -124,7 +126,7 @@ function poistaAsiakas(asiakas_id, etunimi, sukunimi){
 			alert("Asiakkaan poisto epäonnistui.");	        	
         }else if(responseObj.response==1){ 
 			document.getElementById("rivi_"+asiakas_id).style.backgroundColor="red";
-			alert("Asiakkaan " + decodeURI(etunimi) + decodeURI(sukunimi) +" poisto onnistui."); //decodeURI() muutetaan enkoodatut merkit takaisin normaaliksi kirjoitukseksi
+			alert("Asiakkaan " + decodeURI(nimi) +" poisto onnistui."); //decodeURI() muutetaan enkoodatut merkit takaisin normaaliksi kirjoitukseksi
 			haeAsiakkaat();        	
 		}
    	})
