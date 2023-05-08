@@ -5,12 +5,13 @@
 <head>
 <meta charset="ISO-8859-1">
 <script src="scripts/main.js"></script>
+<script src="scripts/io.js"></script>
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <title>Asiakaslista</title>
 
 
 </head>
-<body>
+<body onload="asetaFokus('hakusana')" onkeydown="tutkiKey(event, 'listaa')">
 <table id="listaus">
 	<thead>
 		<tr>
