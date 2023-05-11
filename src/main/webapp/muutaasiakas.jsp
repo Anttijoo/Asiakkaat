@@ -1,3 +1,4 @@
+<%@include file="header.jsp" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -37,8 +38,8 @@
 		<input type="hidden" name="asiakas_id" id="asiakas_id">
 	</form>
 	<span id="ilmo"></span>
+	<script>
+	haeAsiakas();
+	</script>
 </body>
-<script>
-haeAsiakas();
-</script>
 </html>
